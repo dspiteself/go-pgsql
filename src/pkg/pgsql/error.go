@@ -8,20 +8,20 @@ import (
 	"fmt"
 )
 
-// Error contains detailed error information received from a PostgreSQL backend.
+// PGError contains detailed error information received from a PostgreSQL backend.
 //
-// Many go-pgsql functions return an os.Error value. In case of a backend error,
-// a type assertion as shown below gives you a *pgsql.Error with all details:
+// Many go-pgsql functions return an os.PGError value. In case of a backend error,
+// a type assertion as shown below gives you a *pgsql.PGError with all details:
 //
 //	...
 //	_, err := rs.FetchNext()
 //	if err != nil {
-//		if pgerr, ok := err.(*pgsql.Error); ok {
+//		if pgerr, ok := err.(*pgsql.PGError); ok {
 //			// Do something with pgerr
 //		}
 //	}
 //	...
-type Error struct {
+type PGError struct {
 	severity         string
 	code             string
 	message          string
@@ -36,55 +36,55 @@ type Error struct {
 	routine          string
 }
 
-func (e *Error) Severity() string {
+func (e *PGError) Severity() string {
 	return e.severity
 }
 
-func (e *Error) Code() string {
+func (e *PGError) Code() string {
 	return e.code
 }
 
-func (e *Error) Message() string {
+func (e *PGError) Message() string {
 	return e.message
 }
 
-func (e *Error) Detail() string {
+func (e *PGError) Detail() string {
 	return e.detail
 }
 
-func (e *Error) Hint() string {
+func (e *PGError) Hint() string {
 	return e.hint
 }
 
-func (e *Error) Position() string {
+func (e *PGError) Position() string {
 	return e.position
 }
 
-func (e *Error) InternalPosition() string {
+func (e *PGError) InternalPosition() string {
 	return e.internalPosition
 }
 
-func (e *Error) InternalQuery() string {
+func (e *PGError) InternalQuery() string {
 	return e.internalQuery
 }
 
-func (e *Error) Where() string {
+func (e *PGError) Where() string {
 	return e.where
 }
 
-func (e *Error) File() string {
+func (e *PGError) File() string {
 	return e.file
 }
 
-func (e *Error) Line() string {
+func (e *PGError) Line() string {
 	return e.line
 }
 
-func (e *Error) Routine() string {
+func (e *PGError) Routine() string {
 	return e.routine
 }
 
-func (e *Error) String() string {
+func (e *PGError) String() string {
 	return fmt.Sprintf(
 		`Severity: %s
 		Code: %s
@@ -100,4 +100,7 @@ func (e *Error) String() string {
 		Routine: %s`,
 		e.severity, e.code, e.message, e.detail, e.hint, e.position,
 		e.internalPosition, e.internalQuery, e.where, e.file, e.line, e.routine)
+}
+func (e *PGError) Error() string {
+	return e.String()
 }
